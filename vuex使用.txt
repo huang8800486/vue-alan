@@ -1,0 +1,128 @@
+一.Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+
+安装、使用 vuex
+npm install vuex --save
+
+main.js引入vuex
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
+3.五大核心概念
+State       ==> 状态
+Getters     ==> 读取状态
+Mutations   ==> 修改状态(同步操作)
+Actions     ==> 异步修改状态, Action 类似于 mutation，不同在于：Action 提交的是 mutation，而不是直接变更状态。Action 可以包含任意异步操作。
+Modules     ==> 模块分类管理
+
+// vuex管理
+@src/components/store/index.js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex);
+// 状态
+const state = {
+    count: 0
+}
+
+// 获取状态
+// 请当做 计算属性来写，所有的 getter, 接收 完整的state树，做第一个参数
+const getters = {
+    evenOrOdd: state => state.count % 2 == 0 ? "偶数" : "奇数"
+}
+
+// 修改状态(同步)
+// 当执行程序时 state 突然发生变化之行为，称为 mutations
+const mutations = {
+    increment(state){
+        state.count++
+    },
+
+    decrement(state){
+        state.count--
+    }
+}
+
+// 异步修改状态
+// action 不改变状态，只提交(commit) mutation。
+// action 可以包含任意异步操作。
+const actions = {
+    increment: ({
+        commit
+    }) => commit("increment"),
+
+    decrement: ({
+        commit
+    }) => commit("decrement")
+}
+export default new Vuex.Store({
+    state,
+    getters,
+    mutations,
+    actions
+})
+
+//main.js
+import store from './store/index'
+new Vue({
+  el: '#app',
+  router,
+  store,
+  components: { App },
+  template: '<App/>'
+})
+
+项目结构
+store
+    ├── index.js          # 我们组装模块并导出 store 的地方
+    ├── actions.js        # 根级别的 action
+    ├── mutations.js      # 根级别的 mutation
+    └── modules
+        ├── cart.js       # 购物车模块
+        └── products.js   # 产品模块
+
+Vuex模块化
+1.如果没有命名空间, namespaced: false
+由于 getters 不区分模块，所以不同模块中的 getters 如果重名，Vuex 会报出 'duplicate getter key: [重复的getter名]' 错误。
+
+/store/index.js 添加4个模块化
+import Vue from 'vue'
+import Vuex from 'vuex'
+import moduleA from './modules/moduleA'
+import moduleB from './modules/moduleB'
+import moduleC from './modules/moduleC'
+import moduleD from './modules/moduleD'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+    modules: {
+        moduleA,
+        moduleB,
+        moduleC,
+        moduleD
+    }
+})
+
+在组件中调
+computed: {
+    ...mapGetters({
+        EvenOrOddA: 'moduleA/EvenOrOdd',    // 有命名空间, namespaced = true
+        EvenOrOddB: 'moduleB/EvenOrOdd',    // 有命名空间, namespaced = true
+        EvenOrOddC: 'EvenOrOddC',
+        EvenOrOddD: 'EvenOrOddD',
+        getStateC: 'getStateC',
+        getStateD: 'getStateD'
+    }),
+
+    ...mapState([
+        "moduleA",
+        "moduleB",
+        "moduleC",
+        "moduleD"
+    ])
+},
+
+this.$store.commit同理, 有命名空间, 必加模块名
+this.$store.commit("moduleA/increment");        // 模块moduleA中的mutations中的increment方法
+
