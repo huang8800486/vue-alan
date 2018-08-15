@@ -1,0 +1,7 @@
+一.新建组件要加未登录排除, 如新加/download/main
+
+1.src/router/index.js下加入根目录download
+let arr = ['index', 'cms', 'register', 'trade', 'help_center', 'forgetPassword', 'login', 'notice_info', 'otcIndex', 'otc_home', 'otc_ads_Hall', 'otc_personal', 'contract', 'mining', 'download']
+
+2.src/store/baseData.js下加入根目录download
+let arr = ['index', 'cms', 'register', 'trade', 'help_center', 'forgetPassword', 'login', 'notice_info', 'otcIndex', 'otc_home', 'otc_ads_Hall', 'otc_personal', 'contract', 'mining', 'download']

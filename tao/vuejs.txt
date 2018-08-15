@@ -1,0 +1,512 @@
+一.vue-cli快速搭建vue项目
+1.安装vue-cli ：npm install -g vue-cli
+2.创建项目 vue init webpack alan
+
+一.语法
+文本插值 ==> {{msg}}
+绑定元素特性 ==> v-bind:title="msg"
+条件 ==> v-if
+循环 == v-for
+事件监听器 ==> v-on:click
+表单输入和应用状态之间的双向绑定 ==> v-model
+
+var obj = {
+  foo: 'bar'
+}
+Object.freeze(obj)，这会阻止修改现有的属性，也意味着响应系统无法再追踪变化。
+
+二.模板语法
+文本插值 ==> {{msg}}
+
+v-once ==> 只执行一次, 不双向绑定
+<span v-once>这个将不会改变: {{ msg }}</span>
+
+v-bind ==> 绑定元素
+<div v-bind:id="dynamicId"></div>
+值是 null、undefined 或 false，则 id 特性甚至不会被包含在渲染出来的
+
+使用 JavaScript 表达式
+{{ number + 1 }}
+{{ ok ? 'YES' : 'NO' }}
+{{ message.split('').reverse().join('') }}
+
+指令
+指令 (Directives) 是带有 v- 前缀的特殊特性。指令特性的值预期是单个 JavaScript 表达式 (v-for 是例外情况，稍后我们再讨论)。指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM。回顾我们在介绍中看到的例子
+
+参数
+一些指令能够接收一个“参数”，在指令名称之后以冒号表示。
+
+修饰符
+修饰符 (Modifiers) 是以半角句号 . 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。例如，.prevent 修饰符告诉 v-on 指令对于触发的事件调用 
+
+指令:参数.修饰符
+v-on:submit.prevent
+
+缩写
+v-bind 缩写
+<!-- 完整语法 -->
+<a v-bind:href="url">...</a>
+<!-- 缩写 -->
+<a :href="url">...</a>
+
+v-on 缩写
+<!-- 完整语法 -->
+<a v-on:click="doSomething">...</a>
+<!-- 缩写 -->
+<a @click="doSomething">...</a>
+
+三.计算属性,computed
+<div id="example">
+  <p>Original message: "{{ message }}"</p>
+  <p>Computed reversed message: "{{ reversedMessage }}"</p>
+</div>
+computed: {
+    // 计算属性的 getter
+    reversedMessage: function () {
+      // `this` 指向 vm 实例
+      return this.message.split('').reverse().join('')
+    }
+}
+计算属性缓存 vs 方法
+计算属性只有在它的相关依赖发生改变时才会重新求值。
+我们可能有其他的计算属性依赖于 A 。如果没有缓存，我们将不可避免的多次执行 A 的 getter！如果你不希望有缓存，请用方法来替代。
+
+计算属性 vs 侦听属性
+var vm = new Vue({
+  el: '#demo',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar',
+    fullName: 'Foo Bar'
+  },
+  watch: {
+    firstName: function (val) {
+      this.fullName = val + ' ' + this.lastName
+    },
+    lastName: function (val) {
+      this.fullName = this.firstName + ' ' + val
+    }
+  }
+})
+通常更好的做法是使用计算属性而不是命令式的 watch 回调
+var vm = new Vue({
+  el: '#demo',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar'
+  },
+  computed: {
+    fullName: function () {
+      return this.firstName + ' ' + this.lastName
+    }
+  }
+})
+
+四.侦听器 watch
+来响应数据的变化。当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。
+
+
+五.绑定 HTML Class
+对象语法
+v-bind:class
+<div v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
+
+绑定的数据对象不必内联定义在模板里：
+<div v-bind:class="classObject"></div>
+
+data () {
+  return {
+    classObject: {
+      active: true,
+      'text-danger': false
+    }
+  }
+},
+
+绑定一个返回对象的计算属性。这是一个常用且强大的模式：
+data: {
+  isActive: true,
+  error: null
+},
+computed: {
+  classObject: function () {
+    return {
+      active: this.isActive && !this.error,
+      'text-danger': this.error && this.error.type === 'fatal'
+    }
+  }
+}
+
+数组语法
+<div v-bind:class="[activeClass, errorClass]"></div>
+<div v-bind:class="[{ active: isActive }, errorClass]"></div>
+
+六.条件渲染
+v-if  ==> 销毁重建, 条件第一次变为真时，才会开始渲染条件块。
+<h1 v-if="ok">Yes</h1>
+<h1 v-else>No</h1>
+
+v-show  ==> 切换元素的 CSS 属性 display, 不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换。
+<h1 v-show="ok">Hello!</h1>
+
+总结: 
+1.频繁地切换，则使用 v-show, 运行时条件很少改变，则使用 v-if
+2.当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级。
+
+七.列表渲染
+v-for数组, index为下标
+<li v-for="(item, index) in AlanArr" :key="index">
+  {{item.message}} -- {{index}}
+</li>
+
+v-for对象, key为键值名, value为键值对, index为下标
+<li v-for="(value, key, index) in object" :key="index">
+  {{key}} -- {{value}} -- {{index}}
+</li>
+
+八.显示过滤/排序结果
+<li v-for="n in evenNumbers">{{ n }}</li>
+data: {
+  numbers: [ 1, 2, 3, 4, 5 ]
+},
+computed: {
+  evenNumbers: function () {
+    return this.numbers.filter(function (number) {
+      return number % 2 === 0
+    })
+  }
+}
+或者
+<li v-for="n in even(numbers)">{{ n }}</li>
+data: {
+  numbers: [ 1, 2, 3, 4, 5 ]
+},
+methods: {
+  even: function (numbers) {
+    return numbers.filter(function (number) {
+      return number % 2 === 0
+    })
+  }
+}
+
+九.事件处理
+v-on 
+1.接收一个需要调用的方法名称
+<button v-on:click="greet">Greet</button>
+
+2.内联处理器中的方法
+<button v-on:click="say('hi')">Say hi</button>
+
+3.$event原始的 DOM 事件。
+<button v-on:click="say('hi', $event)">Say hi</button>
+
+十.事件修饰符 ==> 修饰符是由点开头的指令后缀来表示的。
+
+stop ==> 阻止单击事件继续传播
+<a v-on:click.stop="doThis"></a>
+
+prevent ==> 提交事件不再重载页面
+<form v-on:submit.prevent="onSubmit"></form>
+
+.stop.prevent ==> 修饰符可以串联
+<a v-on:click.stop.prevent="doThat"></a>
+
+prevent ==> 只有修饰符
+<form v-on:submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+capture ==> 即元素自身触发的事件先在此处处理，然后才交由内部元素进行处理
+<div v-on:click.capture="doThis">...</div>
+
+<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+self ==> 即事件不是从内部元素触发的
+<div v-on:click.self="doThat">...</div>
+
+once ==> 点击事件将只会触发一次
+<a v-on:click.once="doThis"></a>
+
+
+十一.系统修饰键
+.ctrl
+.alt
+.shift
+.meta
+
+<!-- Alt + C -->
+<input @keyup.alt.67="clear">
+
+<!-- Ctrl + Click -->
+<div @click.ctrl="doSomething">Do something</div>
+
+十二.exact 修饰符, 修饰符允许你控制由精确的系统修饰符组合触发的事件。
+<!-- 即使 Alt 或 Shift 被一同按下时也会触发 -->
+<button @click.ctrl="onClick">A</button>
+
+<!-- 有且只有 Ctrl 被按下的时候才触发 -->
+<button @click.ctrl.exact="onCtrlClick">A</button>
+
+<!-- 没有任何系统修饰符被按下的时候才触发 -->
+<button @click.exact="onClick">A</button>
+
+十三.鼠标按钮修饰符
+.left
+.right
+.middle
+
+十四.表单输入绑定
+v-model 指令在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定。
+v-model 会忽略所有表单元素的 value、checked、selected 初始值,
+
+1.文本
+<input v-model="message" placeholder="edit me">
+
+2.多行文本
+<textarea v-model="message" placeholder="add multiple lines"></textarea>
+
+3.复选框
+<input type="checkbox" id="checkbox" v-model="checked">
+<label for="checkbox">{{ checked }}</label>
+
+4.多个复选框，绑定到同一个数组：
+<div id='example-3'>
+  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+  <label for="jack">Jack</label>
+  <input type="checkbox" id="john" value="John" v-model="checkedNames">
+  <label for="john">John</label>
+  <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+  <label for="mike">Mike</label>
+  <br>
+  <span>Checked names: {{ checkedNames }}</span>
+</div>
+new Vue({
+  el: '#example-3',
+  data: {
+    checkedNames: []
+  }
+})
+
+5.单选按钮
+<div id="example-4">
+  <input type="radio" id="one" value="One" v-model="picked">
+  <label for="one">One</label>
+  <br>
+  <input type="radio" id="two" value="Two" v-model="picked">
+  <label for="two">Two</label>
+  <br>
+  <span>Picked: {{ picked }}</span>
+</div>
+
+new Vue({
+  el: '#example-4',
+  data: {
+    picked: ''
+  }
+})
+
+选择框
+<div id="example-5">
+  <select v-model="selected">
+    <option disabled value="">请选择</option>
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+  </select>
+  <span>Selected: {{ selected }}</span>
+</div>
+
+new Vue({
+  el: '...',
+  data: {
+    selected: ''
+  }
+}
+
+用 v-for 渲染的动态选项：
+<select v-model="selected">
+  <option v-for="option in options" v-bind:value="option.value">
+    {{ option.text }}
+  </option>
+</select>
+<span>Selected: {{ selected }}</span>
+
+new Vue({
+  el: '...',
+  data: {
+    selected: 'A',
+    options: [
+      { text: 'One', value: 'A' },
+      { text: 'Two', value: 'B' },
+      { text: 'Three', value: 'C' }
+    ]
+  }
+})
+
+值绑定
+<!-- 当选中时，`picked` 为字符串 "a" -->
+<input type="radio" v-model="picked" value="a">
+
+<!-- `toggle` 为 true 或 false -->
+<input type="checkbox" v-model="toggle">
+
+<!-- 当选中第一个选项时，`selected` 为字符串 "abc" -->
+<select v-model="selected">
+  <option value="abc">ABC</option>
+</select>
+
+
+十五.组件基础
+调用内建的 $emit 方法并传入事件的名字，来向父级组件触发一个事件：
+<button v-on:click="$emit('enlarge-text')">
+  Enlarge text
+</button>
+
+然后我们可以用 v-on 在博文组件上监听这个事件，就像监听一个原生 DOM 事件一样：
+<blog-post v-on:enlarge-text="postFontSize += 0.1"></blog-post>
+
+十六.在模块系统中局部注册
+import ComponentA from './ComponentA.vue'   // 引入组件
+
+// 注册组件
+export default {
+  components: {
+    ComponentA
+  }
+}
+
+在动态组件上使用 keep-alive
+<!-- 失活的组件将会被缓存！-->
+<keep-alive>
+  <component v-bind:is="currentTabComponent"></component>
+</keep-alive>
+
+十七.自定义指令
+注册局部指令,也接受一个 directives的选项
+<input v-focus>
+
+directives: {
+    focus: {
+        // 指令的定义
+        inserted: function (el) {
+            el.focus()
+        }
+    }
+},
+
+十八. 实例方法 / 数据
+this.$el ==> 模板DOM元素
+this.$data ==> 获取data
+this.$set(target,key,value) ==> 动态的给数组、对象添加修改数据，并更新视图中数据的显示。
+this.$options ==> 需要在选项中包含自定义属性时会有用处
+this.$parent ==> 父实例，如果当前实例有的话。
+this.$root ==> 当前组件树的根 Vue 实例。如果当前实例没有父实例，此实例将会是其自己。
+this.$refs ==> 一个对象，持有注册过 ref 特性 的所有 DOM 元素和组件实例。
+
+实例方法 / 事件
+this.$on(event, callback)       ==> 监听当前实例上的自定义事件。事件可以由vm.$emit触发。回调函数会接收所有传入事件触发函数的额外参数。
+this.$once(event, callback)     ==> 监听一个自定义事件，但是只触发一次，在第一次触发之后移除监听器。
+this.$off(event, callback)      ==> 移除自定义事件监听器。
+this.$emit( eventName, […args] )==> 触发当前实例上的事件。附加参数都会传给监听器回调。
+this.$nextTick( [callback] )    ==> 等DOM更新后
+
+生命周期钩子 (按照它们被调用的顺序)
+beforeCreate    ==> 组件实例刚被创建,组件属性计算之前, 如data属性等
+created         ==> 组件实例创建完成, 属性已绑定, 但DOM还未生成, $el属性还不存在
+beforeMount     ==> 模板编译/挂载之前
+mounted         ==> 模板编译/挂载之后
+beforeUpdate    ==> 组件更新之前
+updated         ==> 组件更新之后
+activated       ==> for keep-alive, 组件被激活时调用
+deactivated     ==> for keep-alive, 组件被移除时调用
+beforeDestroy   ==> 组件销毁前调用
+destroyed       ==> 组件销毁后调用
+
+生命周期总结
+beforecreate : 举个栗子：可以在这加个loading事件 
+created ：在这结束loading，还做一些初始化，实现函数自执行 
+mounted ： 在这发起后端请求，拿回数据，配合路由钩子做一些事情
+beforeDestroy： 你确认删除XX吗？ destroyed ：当前组件已被删除，清空相关内容
+
+十九.代码风格
+1.组件名为多个单词, 如header-top, 避免跟现有的以及未来的 HTML 元素相冲突，因为所有的 HTML 元素名称都是单个单词的。
+2.为 v-for 设置键值 :key
+3.单文件组件文件的大小写 ==> MyComponent.vue
+4.基础组件名 ==> 应用特定样式和约定的基础组件 (也就是展示类的、无逻辑的或无状态的组件) 应该全部以一个特定的前缀开头，比如 Base、App 或 V。
+components/
+|- BaseButton.vue
+|- BaseTable.vue
+|- BaseIcon.vue
+5.组件名中的单词顺序 强烈推荐 ==> 组件名应该以高级别的 (通常是一般化描述的) 单词开头，以描述性的修饰词结尾。
+components/
+|- SearchButtonClear.vue
+|- SearchButtonRun.vue
+|- SearchInputQuery.vue
+|- SearchInputExcludeGlob.vue
+|- SettingsCheckboxTerms.vue
+|- SettingsCheckboxLaunchOnStartup.vue
+
+
+父组件向子组件传值props
+<div class="home">
+    <input type="text" v-model="inputValue">
+    <button @click="handleClik">提交</button>
+    <ul>
+        <Todo-Item v-for="(item, index) in list" :key="index" :title="item" :index="index" @delect="delectList"></Todo-Item>
+    </ul>
+</div>
+
+<script>
+    import TodoItem from "./TodoItem"
+    export default {
+        name: 'home',
+        data() {
+            return {
+                inputValue: '',
+                list:[]
+            }
+        },
+        methods:{
+            handleClik(){
+                this.list.push(this.inputValue);
+                this.inputValue = "";
+            },
+            delectList(index){
+                this.list.splice(index, 1)
+            }
+        },
+        components: {
+            TodoItem
+        }
+    }
+</script>
+
+子组件向父组件传值this.$emit
+<template>
+    <li @click="delectHandle">{{title}}</li>
+</template>
+
+<script>
+    export default {
+        name: 'home',
+        props: ["title", "index"],
+        data() {
+            return {
+                inputValue: '',
+                list:[]
+            }
+        },
+        methods:{
+            delectHandle(){
+                console.log(this.index)
+                this.$emit("delect", this.index)
+            }
+        }
+    }
+
+</script>
+
+
+2018.8.9 roter跳转
+<router-link :to="'moduleB'">跳转到moduleB</router-link>
+
+
+

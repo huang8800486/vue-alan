@@ -1,0 +1,35 @@
+// 指令
+{{msg}}   ==> 文本插值
+v-text    ==> 文本插值
+v-show    ==> 切换元素的display CSS属性
+v-if      ==> 销毁并重建, 根据表达式的值的真假条件渲染元素
+v-else    ==> 限制：前一兄弟元素必须有 v-if 或 v-else-if
+v-else-if ==> 限制：前一兄弟元素必须有 v-if 或 v-else-if
+v-for     ==> 遍历元素(item, index)
+v-bind    ==> 绑定元素属性
+v-pre     ==> 不需要编译
+v-cloak   ==> 这个指令保持在元素上直到关联实例结束编译, [v-cloak] { display: none } 一起用时，这个指令可以隐藏未编译的 Mustache 标签直到实例准备完毕。
+v-once    ==> 只渲染元素和组件一次
+v-model   ==> input创建双向绑定
+v-model.lazy   ==> 取代 input 监听 change 事件
+v-model.number ==> 输入字符串转为数字
+v-model.trim   ==> 输入首尾空格过滤
+v-on:click==> 缩写@, 事件绑定
+v-on:click.stop    ==> 阻止冒泡
+v-on:click.prevent ==> 阻止默认事件
+v-on:click.capture ==> 添加事件侦听器时使用capture模式
+v-on:click.self    ==> 绑定的元素本身触发时才触发回调
+v-on:click.native - 监听组件根元素的原生事件。
+v-on:click.once - 只触发一次回调。
+v-on:click.{keyCode | keyAlias} - 只当事件是从特定键触发时才触发回调。
+v-on:click.left - (2.2.0) 只当点击鼠标左键时触发。
+v-on:click.right - (2.2.0) 只当点击鼠标右键时触发。
+v-on:click.middle - (2.2.0) 只当点击鼠标中键时触发。
+v-on:click.passive - (2.3.0) 以 { passive: true } 模式添加侦听器
+
+ref:引用指向的就是 DOM 元素
+<p ref="exmaple">hello</p>
+console.log(this.$refs.exmaple);
+
+
+

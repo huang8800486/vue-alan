@@ -1,0 +1,4 @@
+[Vue warn]: Avoid using non-primitive value as key, use string/number value instead.
+<el-carousel-item v-for="item in items" :key="item">
+这里的[Vue warn]是指不要用对象或是数组作为key，用string或value作为key。
+你这里很明显item是对象，:key相当于是索引的作用，提高循环性能，如果循环量较小，不写也可以的。

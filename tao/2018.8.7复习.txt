@@ -1,0 +1,24 @@
+﻿1.v-on:click="say('h1', #event)"        // $event原始的 DOM 事件。
+2.directives    // 自定义指令
+3.this.$el ==> 模板DOM元素
+4.this.$data ==> 获取data
+5.this.$set(target,key,value) ==> 动态的给数组、对象添加修改数据，并更新视图中数据的显示。
+6.this.$options ==> 需要在选项中包含自定义属性时会有用处
+7.this.$parent ==> 父实例，如果当前实例有的话。
+8.this.$root ==> 当前组件树的根 Vue 实例。如果当前实例没有父实例，此实例将会是其自己。
+9.this.$refs ==> 一个对象，持有注册过 ref 特性 的所有 DOM 元素和组件实例。
+10.this.$on(event, callback)       ==> 监听当前实例上的自定义事件。事件可以由vm.$emit触发。回调函数会接收所有传入事件触发函数的额外参数。
+11.this.$once(event, callback)     ==> 监听一个自定义事件，但是只触发一次，在第一次触发之后移除监听器。
+12.this.$off(event, callback)      ==> 移除自定义事件监听器。
+13.this.$emit( eventName, […args] )==> 触发当前实例上的事件。附加参数都会传给监听器回调。
+14.this.$nextTick( [callback] )    ==> 等DOM更新后
+11.beforeCreate    ==> 组件实例刚被创建,组件属性计算之前, 如data属性等
+12.created         ==> 组件实例创建完成, 属性已绑定, 但DOM还未生成, $el属性还不存在
+13.beforeMount     ==> 模板编译/挂载之前
+14.mounted         ==> 模板编译/挂载之后
+15.beforeUpdate    ==> 组件更新之前
+16.updated         ==> 组件更新之后
+17.activated       ==> for keep-alive, 组件被激活时调用
+18.deactivated     ==> for keep-alive, 组件被移除时调用
+19.beforeDestroy   ==> 组件销毁前调用
+20.destroyed       ==> 组件销毁后调用

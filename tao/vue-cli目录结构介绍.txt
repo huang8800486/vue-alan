@@ -1,0 +1,61 @@
+二.总体框架
+build目录  ==>  保存一些webpack的初始化配置
+config目录 ==>  项目初始化的配置,环境配置
+src目录    ==>  src目录是我们要开发的目录
+  -assets        // 静态资源(样式文件,css,js), 这里的资源会被wabpack构建
+  -components    // 组件文件
+    -common      // 公共的vue组件
+    -module      // 模块组件, 组公共头部header.vue, footer.vue
+    -page        // 所有页面组件
+    -index.vue   // 网站页面入口
+  -router        // 路由组件
+  -App.vue       // 是项目入口文件
+  -main.js       // 是项目的核心文件
+static目录        // 第三方库的静态文件
+.babelrc          // babelrc编译参数
+.editorconfig     // 代码格式
+.gitgonore        // git上传忽略文件配置
+.postcssrc.js     // 转化css的工具
+index.html        // 主页
+package-lock.json // 锁定安装时的包的版本号，并且需要上传到git，以保证其他人在npm install时大家的依赖能保证一致。
+package.json      // 项目基本信息
+README.mo         // 项目说明
+
+三.文件结构细分
+三.build——[webpack配置]
+build文件主要是webpack的配置，主要启动文件是dev-server.js，当我们输入npm run dev首先启动的就是dev-server.js，它会去检查node及npm版本，加载配置文件，启动服务。
+build.js             ==> 生产环境构建
+check-versions.js    ==> 版本检查
+utils.js             ==> 构建相关工具
+vue-loader.conf.js   ==> css加载器配置
+webpack.base.conf.js ==> webpack基本配置
+webpack.dev.conf.js  ==> webpack开发环境配置
+webpack.prod.conf.js ==> webpack生产环境配置
+
+四.config——[项目配置]
+dev.env.js  ==> 开发环境变量
+index.js    ==> 项目配置文件
+prod.env.js ==> 生产环境变量
+四.node_modules——[依赖包]
+在两种情况下我们会自己去安装依赖：
+（1）项目运行缺少该依赖包：例如项目加载外部css会用到的css-loader，路由跳转vue-loader等（安装方法示例：npm install css-loader）
+（2）安装插件：如vux（基于WEUI的移动端组件库），vue-swiper（轮播插件
+
+五.index.html——[主页]
+index.html如其他html一样，但一般只定义一个空的根节点，在main.js里面定义的实例将挂载在根节点下，内容都通过vue组件来填充
+
+六.App.vue——[根组件]
+一个vue页面通常由三部分组成:模板(template)、js(script)、样式(style)
+【template】
+其中模板只能包含一个父节点，也就是说顶层的div只能有一个（父节点为#app的div，其没有兄弟节点）
+<router-view></router-view>是子路由视图，后面的路由页面都显示在此处
+打一个比喻吧,<router-view>类似于一个插槽，跳转某个路由时，该路由下的页面就插在这个插槽中渲染显示
+
+【script】
+vue通常用es6来写，用export default导出，其下面可以包含数据data，生命周期(mounted等)，方法(methods)等，具体语法请看vue.js文档，在后面我也会通过例子来说明。
+
+【style】
+样式通过style标签<style></style>包裹，默认是影响全局的，如需定义作用域只在该组件下起作用，需在标签上加scoped，<style scoped></style>
+
+七.main.js——[入口文件]
+main.js主要是引入vue框架，根组件及路由设置，并且定义vue实例，components:{App}就是引入的根组件App.vue
