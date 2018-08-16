@@ -1,8 +1,5 @@
 <template>
-  <div class="post">
-    <div class="loading" v-if="loading">
-      <span>Loading...</span>
-    </div>
+  <div class="After">
     <div class="error" v-if="error">
       <span>{{error}}</span>
     </div>
@@ -17,37 +14,33 @@
   import "@/assets/css/index.styl"
   import axios from "axios"
   export default {
-    name: 'Post',
+    name: 'After',
     data() {
       return {
-        loading: false,
         error: null,
         post: null
       }
     },
-    // 组件创建完后获取数据，
-    // 此时 data 已经被 observed 了
-    created() {
-      this.fetchData()
+    beforeRouteEnter (to, prev, next) {
+      axios.get("static/js/data.json", {})
+      .then((res) =>{
+        next(vm => vm.setData(res))
+      })
     },
-    watch: {
-      '$route': 'fetchData'
+    // 路由改变前，组件就已经渲染完了
+    // 逻辑稍稍不同
+    beforeRouteUpdate (to, prev, next) {
+      this.post = null
+      axios.get("static/js/data.json", {})
+      .then((res) =>{
+        this.setData(res)
+        next()
+      })
     },
-
     methods: {
-      fetchData() {
-        this.error = this.post = null
-        this.loading = true
-        axios.get("static/js/data.json", {})
-        .then((res) => {
-          this.loading = false
-          this.post = res.data[0]
-          console.log(res)
-        })
-        .catch((err) => {
-          console.log(this)
-          this.error = err.toString()
-        });
+      setData(res) {
+        this.post = res.data[0]
+        console.log(res)
       }
     }
   }
