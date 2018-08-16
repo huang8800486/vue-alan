@@ -18,7 +18,7 @@
     import axios from "axios"
     export default {
         name: 'Post',
-        data() {
+        data   () {
             return {
                 loading: false,
                 error: null,
