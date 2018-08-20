@@ -327,3 +327,65 @@ export default {
     }
   }
 }
+
+
+#滚动行为
+注意: 这个功能只在 HTML5 history 模式下可用。
+使用前端路由，当切换到新路由时，想要页面滚到顶部，或者是保持原先的滚动位置，就像重新加载页面那样。 vue-router 能做到，而且更好，它让你可以自定义路由切换时页面如何滚动。
+scrollBehavior 方法
+export default new Router({
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      name: 'Post',
+      component: Post
+    },
+    {
+      path: '/After',
+      name: 'After',
+      component: After
+    },
+    {
+      path: '/Post',
+      name: 'Post',
+      component: Post
+    }
+  ],
+  scrollBehavior(to, from, savedPosition){
+    // return 期望滚动到哪个的位置
+    return {
+      x: 0,
+      y: 0
+    }
+  }
+})
+
+返回 savedPosition，在按下 后退/前进 按钮时，就会像浏览器的原生表现那样：
+scrollBehavior (to, from, savedPosition) {
+  if (savedPosition) {
+    return savedPosition
+  } else {
+    return { x: 0, y: 0 }
+  }
+}
+
+#vue 路由懒加载
+export default new Router({
+  routes: [{
+      path: '/',
+      name: 'Post',
+      component: () => import ('@/components/Post')
+    },
+    {
+      path: '/After',
+      name: 'After',
+      component: () => import ('@/components/After')
+    },
+    {
+      path: '/Post',
+      name: 'Post',
+      component: () => import ('@/components/Post')
+    }
+  ]
+})

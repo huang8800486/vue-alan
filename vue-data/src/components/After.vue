@@ -3,9 +3,9 @@
     <div class="error" v-if="error">
       <span>{{error}}</span>
     </div>
-    <div class="post" v-if="post">
-      <h2>{{ post.name }}</h2>
-      <p>{{ post.age }}</p>
+    <div class="after" v-if="after">
+      <h2>{{ after.name }}</h2>
+      <p>{{ after.age }}</p>
     </div>
   </div>
 </template>
@@ -18,7 +18,7 @@
     data() {
       return {
         error: null,
-        post: null
+        after: null
       }
     },
     beforeRouteEnter (to, prev, next) {
@@ -30,7 +30,7 @@
     // 路由改变前，组件就已经渲染完了
     // 逻辑稍稍不同
     beforeRouteUpdate (to, prev, next) {
-      this.post = null
+      this.after = null
       axios.get("static/js/data.json", {})
       .then((res) =>{
         this.setData(res)
@@ -39,8 +39,7 @@
     },
     methods: {
       setData(res) {
-        this.post = res.data[0]
-        console.log(res)
+        this.after = res.data[0]
       }
     }
   }

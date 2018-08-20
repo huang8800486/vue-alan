@@ -7,7 +7,7 @@
       <span>{{error}}</span>
     </div>
     <div class="post" v-if="post">
-      <h2>{{ post.name }}</h2>
+      <h2>{{ post.name2 }}</h2>
       <p>{{ post.age }}</p>
     </div>
   </div>
@@ -42,10 +42,8 @@
         .then((res) => {
           this.loading = false
           this.post = res.data[0]
-          console.log(res)
         })
         .catch((err) => {
-          console.log(this)
           this.error = err.toString()
         });
       }
