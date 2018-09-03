@@ -1,0 +1,86 @@
+.home {
+  .dad {
+    display: flex;
+    width: 100%;
+    height: 300px;
+    background: #999;
+    margin-bottom:20px;
+    .son {
+      width: 80px;
+      height: 80px;
+      background: #cc3333;
+      border-radius: 10px;
+      margin: 0 5px;
+    }
+  }
+  .dad-1{display:flex; justify-content:flex-start;}
+  .dad-2{display:flex; justify-content:center;}
+  .dad-3{display:flex; justify-content:flex-end;}
+  .dad-4{display:flex; justify-content:space-around;}
+  .dad-5{display:flex; justify-content:space-between;}
+  .dad-6{display:flex; justify-content:space-evenly;}
+  .dad-7{display:flex; align-items: flex-start;}
+  .dad-8{display:flex; align-items: center;}
+  .dad-9{display:flex; align-items: flex-end;}
+  .dad-10{display:flex; align-items: baseline;
+    .son:nth-of-type(1){padding-top:20px;}
+    .son:nth-of-type(3){padding-top:10px;}
+  }
+  .dad-11{display:flex; align-items: stretch;
+    .son{height:auto;}
+  }
+  .dad-12{display:flex; flex-wrap: nowrap;}
+  .dad-13{display:flex; flex-wrap: wrap;}
+  .dad-14{display:flex; flex-wrap: wrap-reverse;}
+}
+
+.about {
+  .dad {
+    display: flex;
+    width: 100%;
+    height: 300px;
+    background: #999;
+    margin-bottom:20px;
+    .son {
+      width: 80px;
+      height: 80px;
+      background: #cc3333;
+      border-radius: 10px;
+      margin: 0 5px;
+    }
+  }
+  .dad-1{
+    .son{align-self: flex-start;}
+  }
+  .dad-2{
+    .son{align-self: center;}
+  }
+  .dad-3{
+    .son{align-self: flex-end;}
+  }
+  .dad-4{
+    .son{align-self: baseline;}
+    .son:nth-of-type(1){padding-top:20px;}
+    .son:nth-of-type(3){padding-top:10px;}
+  }
+  .dad-5{
+    .son{align-self: stretch;}
+    .son:nth-of-type(2){height:auto;}
+  }
+  .dad-6{
+    .son{flex: 1}
+  }
+  .dad-7{
+    .son:nth-of-type(1){flex: 1}
+    .son:nth-of-type(2){flex: 2}
+    .son:nth-of-type(3){flex: 3}
+  }
+  .dad-8{
+    .son:nth-of-type(1){flex: 1}
+    .son:nth-of-type(2){flex: 2}
+  }
+  .dad-9{
+    .son:nth-of-type(1){width:80px;}
+    .son:nth-of-type(2){flex: 2}
+  }
+}
