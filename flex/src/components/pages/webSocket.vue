@@ -129,7 +129,7 @@ export default {
         this.stompClient.subscribe('/topic/pool/pool_result_info', (message) => {
           console.log(message.body) 
         });
-    });
+      });
     },
     disconnect() {
     if (this.stompClient != null) {
